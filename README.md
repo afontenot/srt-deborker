@@ -4,9 +4,7 @@ fix subtitles that have been incorrectly double encoded
 ## What problem does srt-deborker solve?
 
 Have you ever encountered this problem with subtitles (example from 
-[this 
-thread](https://forum.videohelp.com/threads/355208-Strange-Characters-in 
--Subtitle-Editing-using-accents-and-diacritic-marks)?
+[this thread](https://forum.videohelp.com/threads/355208-Strange-Characters-in -Subtitle-Editing-using-accents-and-diacritic-marks)?
 
 > Deixe a oposiÃ§Ã£o ter
 
