@@ -4,7 +4,7 @@ fix subtitles that have been incorrectly double encoded
 ## What problem does srt-deborker solve?
 
 Have you ever encountered this problem with subtitles (example from 
-[this thread](https://forum.videohelp.com/threads/355208-Strange-Characters-in-Subtitle-Editing-using-accents-and-diacritic-marks)?
+[this thread](https://forum.videohelp.com/threads/355208-Strange-Characters-in-Subtitle-Editing-using-accents-and-diacritic-marks))?
 
 > Deixe a oposiÃ§Ã£o ter
 
@@ -16,7 +16,7 @@ as UTF-8) with some other character encoding (often the user's local
 default), and then the result has been re-encoded as a UTF-8 file.
 
 In the case above, the characters "çã" are encoded in UTF-8 using the 
-bytes \xC3\xA7\xC3\xA3 --- two bytes for each character. Most local 
+bytes \xC3\xA7\xC3\xA3 --- two bytes for each character. Most text 
 encodings (the most common being 
 [latin1](https://en.wikipedia.org/wiki/ISO/IEC_8859-1)) are one-byte 
 encodings, meaning that each character that can be represented in the 
@@ -26,21 +26,22 @@ They are usually *local* encodings, meaning that they encode characters
 that are commonly used in a specific language or region.)
 
 Suppose you have software (usually on Windows, Linux does not have this 
-issue) that assumes a file containing these bytes is in a local 
-encoding, not UTF-8. For example, in latin1, 
+issue) that assumes a file containing these bytes is in a one-byte 
+encoding, not UTF-8. For example, in latin1, the bytes decode like 
+this: 
 
-    \xC3 -> À
-    \xA7 -> §
-    \xC3 -> À
-    \xA3 -> £
+    \xC3 → À
+    \xA7 → §
+    \xC3 → À
+    \xA3 → £
 
 In other words, this broken software will display those two correctly 
 encoded UTF-8 characters as "Ã§Ã£", exactly what we see in the example. 
-If you see this, it's *possible* that your movie player is broken in 
+If you see this in your movie player, it's *possible* it is broken in 
 this way. But it's more likely that someone else broke the subtitle 
-file by opening it in a broken tool which resaved it as UTF-8 or copied 
+file by opening it in a buggy tool which resaved it as UTF-8 or copied 
 the improperly decoded subtitles into a text editor which did the same. 
-A broken tool to extract the subtitles from one file might have the 
+A broken tool to extract the subtitles from a video file might have the 
 same effect. If you know of tools which have this bug, please file an 
 issue and I'll list them here.
 
@@ -77,11 +78,6 @@ subtitles uses one or two bytes in UTF-8. I'm open to making this
 program more robust to working with subtitles in other languages in the 
 future.)
 
-As it scans each line of the file, the program builds up a histogram of 
-whether a particular encoding assumption passes the test above. After 
-it's done, you'll see one or more potential encodings, and you can 
-choose the one that seems to give the correct results.
-
 ## How do I use srt-deborker?
 
 If you just want to scan and fix your subtitles (in SubRip / .srt 
@@ -89,9 +85,11 @@ format), it's simple:
 
     python debork.py -o <output.srt> <input.srt>
     
-If the deborker works correctly, you should see one or more encodings 
-along with a sample piece of text chosen from the file which is "fixed" 
-using the selected encoding. Simply type the name of the encoding that 
+As it scans each line of the file, the program builds up a histogram of 
+whether a particular encoding assumption passes the test above. After 
+it's done, you'll see the best encoding(s) the prgram found, along with 
+a sample piece of text chosen from the file which is "fixed" using the 
+selected encoding. Simply type the name of the encoding that correctly 
 fixes the file (there may be more than one, some encodings overlap).
 
 If you already know which encoding was used, you can enter it directly 
@@ -103,4 +101,4 @@ What if you just have a piece of text like "Deixe a oposição ter" and
 you want to see how it would be affected by different encodings? Simply 
 run the script without any arguments at all, and enter the text at the 
 prompt. You can also enter the result you're looking for, and get a 
-list of encodings instead.
+matching list of encodings instead.
